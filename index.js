@@ -65,9 +65,9 @@ async function getData(id) {
 	let obj = {
 		title: bookTitle,
 		author: bookAuthor,
-		level: bookLevel,
+		atosBookLevel: bookLevel,
 		wordCount: bookWordCount,
 	};
-	return {  data: errorBook ? "fail" : obj };
+	return {  data: obj };
 }
 app.listen(process.env.PORT || 3000)
