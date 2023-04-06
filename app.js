@@ -57,10 +57,15 @@ async function getData(id) {
 	// 	productURLs.push(productURL);
 	// });
 	const errorBook = $("#lblErrorOccured").text();
-	const bookTitle = $("#ctl00_ContentPlaceHolder1_ucBookDetail_lblBookTitle").text();
-	const bookAuthor = $("#ctl00_ContentPlaceHolder1_ucBookDetail_lblAuthor").text();
-	const bookLevel = $("#ctl00_ContentPlaceHolder1_ucBookDetail_lblBookLevel").text();
-	const bookWordCount = $("#ctl00_ContentPlaceHolder1_ucBookDetail_lblWordCount").text();
+	// const bookTitle = $("#ctl00_ContentPlaceHolder1_ucBookDetail_lblBookTitle").text();
+	// const bookAuthor = $("#ctl00_ContentPlaceHolder1_ucBookDetail_lblAuthor").text();
+	// const bookLevel = $("#ctl00_ContentPlaceHolder1_ucBookDetail_lblBookLevel").text();
+	// const bookWordCount = $("#ctl00_ContentPlaceHolder1_ucBookDetail_lblWordCount").text();
+	
+	const bookTitle = $("[id$='_lblBookTitle']").text();
+	const bookAuthor = $("[id$='_lblAuthor']").text();
+	const bookLevel = $("[id$='_lblBookLevel']").text();
+	const bookWordCount = $("[id$='_lblWordCount']").text();
 	
 	let obj = {
 		title: bookTitle,
