@@ -91,20 +91,20 @@ async function getDataEms(params){
 	let options = params;
 	//console.log("access_token", access_token, url);
 	if(access_token){
-		data = { data : 'new4'}
+		//data = { data : 'new4'}
 		options.access_token = access_token;
-		// await axios.post(urlPost, options).then(response => {
-		// 	//cheerio.load(response.data);
-		// 	//console.log(url);
-		// 	//data = response.data;
-		// 	data = { data : 'success', result: response.data}
+		await axios.post(urlPost, options).then(response => {
+			//cheerio.load(response.data);
+			//console.log(url);
+			//data = response.data;
+			data = { data : 'success', result: response.data}
 
-		// })
-		// .catch(error => {
-		// 	// error.status = (error.response && error.response.status) || 500;
-		// 	// throw error;
-		// 	data = { data : 'fail'}
-		// });
+		})
+		.catch(error => {
+			// error.status = (error.response && error.response.status) || 500;
+			// throw error;
+			data = { data : 'fail'}
+		});
 		//console.log(data);
 	}else{
 		data = { data : 'fail'};
