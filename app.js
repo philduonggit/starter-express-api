@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const axios = require("axios");
 const cheerio = require("cheerio");
@@ -40,14 +41,21 @@ app.get('/arBook/:id', async (req, res) => {
 	res.send(mData);
 });
 app.post('/postEMS', async (req, res) => {
+	//res.send(options);
+	let params = req.body;
+	let mData = await getDataEms(params);
+	
+	return res.status(200).json(mData);
+});
+async function getDataEms(params){
 	//console.log("productURLs", getData());
 	//res.cookie('BFUserType', 'Librarian');
 	//const param = req.params.id;
 	//let mData = await getData(param);let data;
-	let params = req.body;
-	const apps_admin = process.env.USER_KEY_EMS;
+	//let params = req.body;
+	const user = process.env.USER_KEY_EMS;
 	const secret = process.env.SECRET_KEY_EMS;
-	const url = "https://ems.polyvietnam.edu.vn/rest/v11_3/get_api_access_token?key="+apps_admin+"n&secret=" + secret;
+	const url = "https://ems.polyvietnam.edu.vn/rest/v11_3/get_api_access_token?key="+user+"&secret=" + secret;
 	const urlPost = "https://ems.polyvietnam.edu.vn/rest/v11_3/cap_lead_v2";
 	let access_token;
 	let data;
@@ -55,8 +63,7 @@ app.post('/postEMS', async (req, res) => {
 		//cheerio.load(response.data);
 		//console.log(url);
 		access_token = response.data.access_token;
-		data = { data : 'success'}
-
+		//console.log(response.data);
 	})
 	.catch(error => {
 		// error.status = (error.response && error.response.status) || 500;
@@ -82,13 +89,15 @@ app.post('/postEMS', async (req, res) => {
 		'access_token': access_token
 	  };*/
 	let options = params;
+	//console.log("access_token", access_token, url);
 	if(access_token){
+		data = { data : 'new4'}
 		options.access_token = access_token;
 		// await axios.post(urlPost, options).then(response => {
 		// 	//cheerio.load(response.data);
 		// 	//console.log(url);
 		// 	//data = response.data;
-		// 	data = { data : 'success'}
+		// 	data = { data : 'success', result: response.data}
 
 		// })
 		// .catch(error => {
@@ -97,11 +106,12 @@ app.post('/postEMS', async (req, res) => {
 		// 	data = { data : 'fail'}
 		// });
 		//console.log(data);
+	}else{
+		data = { data : 'fail'};
 	}
-	//res.send(options);
-	
-	return res.status(200).json(data);
-});
+	return data;
+
+}
 async function getData(id) {
 	let productURLs = [];
 	let data;
