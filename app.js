@@ -45,7 +45,9 @@ app.post('/postEMS', async (req, res) => {
 	//const param = req.params.id;
 	//let mData = await getData(param);let data;
 	let params = req.body;
-	const url = "https://ems.polyvietnam.edu.vn/rest/v11_3/get_api_access_token?key=apps_admin&secret=@lead_push4422";
+	const apps_admin = process.env.USER_KEY_EMS;
+	const secret = process.env.SECRET_KEY_EMS;
+	const url = "https://ems.polyvietnam.edu.vn/rest/v11_3/get_api_access_token?key="+apps_admin+"n&secret=" + secret;
 	const urlPost = "https://ems.polyvietnam.edu.vn/rest/v11_3/cap_lead_v2";
 	let access_token;
 	let data;
@@ -53,7 +55,7 @@ app.post('/postEMS', async (req, res) => {
 		//cheerio.load(response.data);
 		//console.log(url);
 		access_token = response.data.access_token;
-		//data = { data : 'success'}
+		data = { data : 'success'}
 
 	})
 	.catch(error => {
@@ -82,18 +84,18 @@ app.post('/postEMS', async (req, res) => {
 	let options = params;
 	if(access_token){
 		options.access_token = access_token;
-		await axios.post(urlPost, options).then(response => {
-			//cheerio.load(response.data);
-			//console.log(url);
-			//data = response.data;
-			data = { data : 'success'}
+		// await axios.post(urlPost, options).then(response => {
+		// 	//cheerio.load(response.data);
+		// 	//console.log(url);
+		// 	//data = response.data;
+		// 	data = { data : 'success'}
 
-		})
-		.catch(error => {
-			// error.status = (error.response && error.response.status) || 500;
-			// throw error;
-			data = { data : 'fail'}
-		});
+		// })
+		// .catch(error => {
+		// 	// error.status = (error.response && error.response.status) || 500;
+		// 	// throw error;
+		// 	data = { data : 'fail'}
+		// });
 		//console.log(data);
 	}
 	//res.send(options);
