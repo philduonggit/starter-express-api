@@ -3,6 +3,7 @@ const express = require('express');
 const axios = require("axios");
 const cheerio = require("cheerio");
 const bodyParser = require('body-parser');
+const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -12,7 +13,7 @@ app.use(bodyParser.json())
     res.send('Yo!')
 })*/
 // Add headers before the routes are defined
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
 
     // // Website you wish to allow to connect
     // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -27,12 +28,15 @@ app.use(function (req, res, next) {
     // // to the API (e.g. in case you use sessions)
     // res.setHeader('Access-Control-Allow-Credentials', true);
 	
-	res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
+	// res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+	res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     // Pass to next layer of middleware
     next();
-});
+});*/
+app.use(cors());
 app.get('/arBook/:id', async (req, res) => {
 	//console.log("productURLs", getData());
 	//res.cookie('BFUserType', 'Librarian');
@@ -45,7 +49,15 @@ app.post('/postEMS', async (req, res) => {
 	let params = req.body;
 	let mData = await getDataEms(params);
 	
-	return res.status(200).json(mData);
+	//return res.status(200).json(mData);
+	res.send(mData);
+});
+app.get('/postEMSToken', async (req, res) => {
+	//res.send(options);
+	let mData = await getDataEmsToken();
+	
+	//return res.status(200).json(mData);
+	res.send(mData);
 });
 async function getDataEms(params){
 	//console.log("productURLs", getData());
@@ -151,5 +163,33 @@ async function getData(id) {
 		wordCount: bookWordCount,
 	};
 	return {  data: obj };
+}
+
+async function getDataEmsToken(){
+	//console.log("productURLs", getData());
+	//res.cookie('BFUserType', 'Librarian');
+	//const param = req.params.id;
+	//let mData = await getData(param);let data;
+	//let params = req.body;
+	const user = process.env.USER_KEY_EMS;
+	const secret = process.env.SECRET_KEY_EMS;
+	const url = "https://ems.polyvietnam.edu.vn/rest/v11_3/get_api_access_token?key="+user+"&secret=" + secret;
+	const urlPost = "https://ems.polyvietnam.edu.vn/rest/v11_3/cap_lead_v2";
+	let access_token;
+	let data;
+	await axios.get(url).then(response => {
+		//cheerio.load(response.data);
+		//console.log(url);
+		access_token = response.data.access_token;
+		//console.log(response.data);
+	})
+	.catch(error => {
+		// error.status = (error.response && error.response.status) || 500;
+		// throw error;
+		data = { data : 'fail'}
+	});
+	data = { data : access_token};
+	return data;
+
 }
 app.listen(process.env.PORT || 3000)
